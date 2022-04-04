@@ -15,7 +15,7 @@ namespace WalletGenerator
             for (int x = 0; x < amount; x++)
             {
                 Random random = new Random();
-                string letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+                string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
                 char[] part1 = new char[5],
                     part2 = new char[5],
                     part3 = new char[5],
@@ -24,10 +24,10 @@ namespace WalletGenerator
                 int i = 0, z = 0, y = 0;
                 for (int j = 0; j < part1.Length; j++, i++, z++, y++)
                 {
-                    part1[j] = letras[random.Next(letras.Length)];
-                    part2[j] = letras[random.Next(letras.Length)];
-                    part3[j] = letras[random.Next(letras.Length)];
-                    part4[j] = letras[random.Next(letras.Length)];
+                    part1[j] = letters[random.Next(letters.Length)];
+                    part2[j] = letters[random.Next(letters.Length)];
+                    part3[j] = letters[random.Next(letters.Length)];
+                    part4[j] = letters[random.Next(letters.Length)];
                 }
 
                 string resultString = new String(part1),

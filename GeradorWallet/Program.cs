@@ -1,45 +1,55 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
-namespace WalletGenerator
+class Program
 {
-    class Program
+    static void Main(string[] args)
     {
-        static void Main(string[] args)
+        Random random = new Random();
+
+        // Nome do arquivo de saída
+        string fileName = "WalletCodes.txt";
+
+        // Solicitar ao usuário quantos wallet codes serão gerados
+        Console.WriteLine("Quantos wallet codes você deseja gerar?");
+        int numCodes = int.Parse(Console.ReadLine());
+
+        // Armazenar os wallet codes gerados
+        HashSet<string> codes = new HashSet<string>();
+
+        // Gerar os wallet codes
+        while (codes.Count < numCodes)
         {
-            Console.Write("Code Amount: ");
-            int amount = Convert.ToInt32(Console.ReadLine());
+            // Gerar quatro segmentos com cinco caracteres cada
+            string segment1 = GenerateSegment(random, 5);
+            string segment2 = GenerateSegment(random, 5);
+            string segment3 = GenerateSegment(random, 5);
+            string segment4 = GenerateSegment(random, 5);
 
-            List<string> codes = new List<string>();
-            for (int x = 0; x < amount; x++)
-            {
-                Random random = new Random();
-                string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-                char[] part1 = new char[5],
-                    part2 = new char[5],
-                    part3 = new char[5],
-                    part4 = new char[5];
+            // Combinar os segmentos em um único wallet code
+            string walletCode = string.Format("{0}-{1}-{2}-{3}", segment1, segment2, segment3, segment4);
 
-                int i = 0, z = 0, y = 0;
-                for (int j = 0; j < part1.Length; j++, i++, z++, y++)
-                {
-                    part1[j] = letters[random.Next(letters.Length)];
-                    part2[j] = letters[random.Next(letters.Length)];
-                    part3[j] = letters[random.Next(letters.Length)];
-                    part4[j] = letters[random.Next(letters.Length)];
-                }
-
-                string resultString = new String(part1),
-                    resultString2 = new String(part2),
-                    resultString3 = new String(part3),
-                    resultString4 = new String(part4),
-                    resultString5 = new String($"{resultString}-{resultString2}-{resultString3}-{resultString4}");
-
-                codes.Add(resultString5);
-                Console.WriteLine(resultString5);
-            }
-            File.WriteAllLines(@"Codes.txt", codes);
+            // Adicionar o código gerado ao HashSet (não permitirá códigos duplicados)
+            codes.Add(walletCode);
         }
+
+        // Escrever os wallet codes em um arquivo de texto
+        using (StreamWriter writer = new StreamWriter(fileName))
+        {
+            foreach (string code in codes)
+            {
+                writer.WriteLine(code);
+            }
+        }
+
+        Console.WriteLine("Os códigos foram salvos em {0}.", fileName);
+    }
+
+    static string GenerateSegment(Random random, int length)
+    {
+        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        return new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray());
     }
 }
